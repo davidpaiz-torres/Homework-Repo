@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js | Class 1</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <style>
+        /* Basic styles for the SVG */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        
+
+        th, td {
+        padding: 5px;
+        text-align: left;
+        }
+
+        td.bold {
+            color: orangered;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Table to select (DO NOT TOUCH THIS) -->
+     <table>
+        <thead>
+            <th>Player</th>
+            <th>Points per game</th>
+            <th>Total points</th>
+        </thead>
+        <tbody id="table_body"></tbody>
+     </table>
+
+<script>
+// Selecting the Container to manipulate
+    const container = d3.selectAll("#table_body")
+         
+// Import the csv
+d3.csv('nba_data.csv').then(function(data){
+
+// sort players by points per game, with highest on top
+// GBless Stack Overflow.. 
+// https://stackoverflow.com/questions/40529504/d3-having-problems-sorting-a-data-set
+    data.sort(function(a, b){ return d3.descending(+a.points_per_game, +b.points_per_game); })
+   
+
+// Visualizing the data in Table Format
+    var rows = container.selectAll('#table_body')
+        .data(data)
+        .enter().append('tr');
+
+    rows.append('td')
+        .text(function(d){
+        d3.select('tr:nth-child(2)')
+        .style('color', 'orangered')
+            console.log(d);
+            return d.player;  
+             
+        });
+    rows.append('td')
+        .text(function(d){
+            console.log(d);
+            return [d.points_per_game];   
+        });
+    
+    rows.append('td')
+        .text(function(d){
+        console.log(d);
+    // It took my way longer than it should have to realize why my commas weren't working in the career points row.
+        return (d.career_points * 1).toLocaleString(); 
+    })
+    
+});
+//if player is active (Lebron James), color that line
+    </script>
+</body>
+</html>
