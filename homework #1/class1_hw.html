@@ -45,10 +45,10 @@
 d3.csv('nba_data.csv').then(function(data){
 
 // sort players by points per game, with highest on top
-// GBless Stack Overflow.. 
-// https://stackoverflow.com/questions/40529504/d3-having-problems-sorting-a-data-set
-    data.sort(function(a, b){ return d3.descending(+a.points_per_game, +b.points_per_game); })
-   
+// GBless Stack Overflow for helping me with this... //
+data.sort(function(a, b){ return d3.descending(+a.points_per_game, +b.points_per_game); })
+// https://stackoverflow.com/questions/40529504/d3-having-problems-sorting-a-data-set //
+ 
 
 // Visualizing the data in Table Format
     var rows = container.selectAll('#table_body')
