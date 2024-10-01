@@ -57,6 +57,7 @@ data.sort(function(a, b){ return d3.descending(+a.points_per_game, +b.points_per
 
     rows.append('td')
         .text(function(d){
+//if player is active (Lebron James), color that line
         d3.select('tr:nth-child(2)')
         .style('color', 'orangered')
             console.log(d);
@@ -72,12 +73,12 @@ data.sort(function(a, b){ return d3.descending(+a.points_per_game, +b.points_per
     rows.append('td')
         .text(function(d){
         console.log(d);
-    // It took my way longer than it should have to realize why my commas weren't working in the career points row.
+// It took my way longer than it should have to realize I had to do * 1 to get the comma working.
         return (d.career_points * 1).toLocaleString(); 
     })
     
 });
-//if player is active (Lebron James), color that line
+
     </script>
 </body>
 </html>
