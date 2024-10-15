@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js | Class 1</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <style>
+        /* Basic styles for the SVG */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        th, td {
+        padding: 5px;
+        text-align: left;
+        }
+
+        td.bold {
+            color: red;
+        }
+
+
+    </style>
+</head>
+<body>
+    <!-- Table to select (DO NOT TOUCH THIS) -->
+     <table>
+        <thead>
+            <th>Player</th>
+            <th>Points per game</th>
+            <th>Total points</th>
+        </thead>
+        <tbody id="table_body"></tbody>
+     </table>
+    <script>
+
+        //select container
+        const container = d3.select('#table_body');
+        //Import the csv
+        d3.csv('nba_data.csv').then(function(data){
+
+            //convert the points from strings to numbers
+            data.forEach(d => {
+                //rename properties
+                d.ppg = +d['points_per_game'];
+                d.car = +d['career_points'];
+            });
+
+            // sort players by points per game, with highest on top
+            data = data.sort(function(x, y){
+                return d3.descending(x.ppg, y.ppg);
+            })
+
+            // add data to container 
+            container.selectAll('players').data(data).enter().append('tr').html(function(d){
+
+                //if player is active (Lebron James), color that line
+                if (d.player == 'LeBron James'){
+                    return '<td class="bold">' + d.player + '</td>' + '<td class="bold">' + d.ppg + '</td>' + '<td class="bold">' + d.car.toLocaleString() + '</td>';
+                }
+                else {
+                    return '<td>' + d.player + '</td>' + '<td>' + d.ppg + '</td>' + '<td>' + d.car.toLocaleString() + '</td>';
+                }
+
+            })
+        });    
+    </script>
+
+</body>
+</html>

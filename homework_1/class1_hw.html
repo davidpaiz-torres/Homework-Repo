@@ -53,7 +53,8 @@ data.sort(function(a, b){ return d3.descending(+a.points_per_game, +b.points_per
 // Visualizing the data in Table Format
     var rows = container.selectAll('#table_body')
         .data(data)
-        .enter().append('tr');
+        .enter()
+        .append('tr');
 
     rows.append('td')
         .text(function(d){
@@ -78,7 +79,6 @@ data.sort(function(a, b){ return d3.descending(+a.points_per_game, +b.points_per
     })
     
 });
-
     </script>
 </body>
 </html>
