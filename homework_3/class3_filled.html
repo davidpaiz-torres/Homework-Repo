@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>D3.js | Class 3</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+
+    <style>
+        /* Basic styles for the SVG */
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        text {
+            font-size: 12px;
+            width: 50px;
+        }
+
+        svg {
+            width: 250px;
+            height: 150px;
+            overflow: visible;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Table to select (DO NOT TOUCH THIS) -->
+    <div id="container"></div>
+
+    <script>
+
+        //select container
+        const container = d3.select('#container');
+
+        // append SVG
+        const svg = container.append('svg');
+
+        //add margin
+        const margin_left = 100;
+        const margin_top = 20;
+
+
+        //Import the csv
+        d3.csv('un_permanent_members_gdp.csv').then(function(data){
+
+
+            //convert the points from strings to numbers
+            data.forEach(d => {
+                //rename properties
+                d.gdp = +d['GDP (in million USD)'];
+                d.pop = +d['Population (in millions)'];
+                d.capita = +d['GDP per Capita (USD)'];
+            });
+
+
+
+            //make scales
+
+            //d3 min/max/extent
+            let captia_range_max = d3.max(data, function(d){
+                return d.capita;
+            })
+
+            let captia_range_min = d3.min(data, function(d){
+                return d.capita;
+            })
+
+            let captia_range = d3.extent(data, function(d){
+                return d.capita;
+            })
+
+            //console log values
+            console.log(captia_range_max,captia_range_min,captia_range)
+
+            //number scale (scaleLinear)
+            const circleRadius = d3.scaleLinear()
+                .domain(captia_range) //input values
+                .range([5,30]) //output values
+
+            //color scale (scaleOrdinal)
+            const circleColor = d3.scaleOrdinal()
+                .domain(['China','France','Russia','UK','US']) //input values
+                .range(['Green','Blue','Green','Blue','Orange']) //output values
+
+            //color scale (scaleLinear)
+            const circleColorLinear = d3.scaleLinear()
+                .domain([0,35000,70000]) //input values
+                .range(['blue','green','Orange']) //output values
+
+
+            svg.selectAll('countries')
+            .data(data)
+            .enter()
+            .append('circle')
+                .attr('cx', function(d,i){
+                    return margin_left + (i * 45)
+                })
+                .attr('cy',function(d,i){
+                    return margin_left
+                })
+                .attr('r',function(d,i){
+                    //radius size based on scale
+                    return circleRadius(d.capita)
+                })
+                .attr('fill',function(d){
+                    //color based on scale
+                    return circleColorLinear(d.capita)
+                });
+
+            svg.selectAll('text')
+            .data(data)
+            .enter()
+            .append('text')
+            .attr('x', function(d,i){
+                    return margin_left + (i * 45)
+                })
+                .attr('text-anchor','middle')
+                .attr('y',function(d,i){
+                    return 150;
+                })
+                .text(function(d,i){
+                    return d.Country;
+                })
+
+
+            
+
+            
+
+        });
+
+
+
+
+    
+    </script>
+
+</body>
+
+
+
+
+</html>
